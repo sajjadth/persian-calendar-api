@@ -14,29 +14,23 @@ To run this application, you need to have the following installed on your system
 1. Clone the repository or download the source code.
 2. Navigate to the project directory in the terminal.
 3. Install the required dependencies by running the following command:
-
-```
-npm install
-```
+    ```
+    npm install
+    ```
 
 ## Usage
 
 To start the server and access the Persian calendar API, use the following command:
 
-```
-npm start
-```
+    npm start
 
 To run the server in development mode with nodemon for automatic restarts during development, you can use:
 
-```
-npm run dev
-
-```
+    npm run dev
 
 The server will be running on port 5000 by default. You can change the port in the `index.js` file if needed.
 
-### Endpoints
+## Endpoints
 
 `GET /`
 Returns the calendar for a specific year and month.
@@ -82,11 +76,11 @@ This endpoint allows you to retrieve the calendar for a specific year and month.
     curl https://persian-calendar-api.sajjadth.workers.dev/?year=1400&month=1
     ```
 
-### Note
+## Note
 
 The API supports years from 1300 to 1500 in the Jalali calendar.
 
-### Third-Party Data Sources
+## Third-Party Data Sources
 
 All third-party data sources used by the Persian Calendar API are from the [starcal](https://github.com/ilius/starcal) repository. The following data sources have been integrated:
 
@@ -107,10 +101,11 @@ Please note that the integration of third-party data sources might entail period
 Thank you for using the Persian Calendar API! We hope it serves your needs effectively and brings you a reliable source of Persian calendar and holiday information.
 
 
-### Contributing
+## Contributing
 
 Contributions are welcome! If you find any bugs or have suggestions for improvements, please open an issue or submit a pull request.
 
-### License
+## License
 
-This project is licensed under the ISC License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
