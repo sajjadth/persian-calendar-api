@@ -1,0 +1,29 @@
+# Dependency directories
+node_modules/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables file (if using .env for configuration)
+.env
+
+# Application configuration
+config.js
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# Generated files
+coverage/
+
+# npm lock file
+package-lock.json
