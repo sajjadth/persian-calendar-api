@@ -358,10 +358,8 @@ const app = express();
 const port = 5000;
 app.get("/", async (req, res) => {
   const { query } = req;
-  const thisYear = Number(new Date().toLocaleDateString("fa-IR-u-nu-latn", { year: "numeric" }));
-  const year =
-    !query.year || (query.year >= 1300 && query.year <= 1500) ? thisYear : Number(query.year);
-
+  const y = Number(query.year);
+  const year = !y || (y < 1300 && y > 1500) ? thisYear : Number(query.year);
   const month =
     query.month && Number(query.month) >= 1 && Number(query.month) <= 12
       ? Number(query.month)
