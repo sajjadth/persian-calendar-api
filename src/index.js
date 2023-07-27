@@ -41,6 +41,8 @@ function getStartOfTheMonthHeader(d, header) {
     .toLocaleDateString("ar-SA", {
       month: "long",
       year: "numeric",
+      timeZone: "UTC",
+      calendar: "islamic",
     })
     .split(" ");
   if (qamari.length === 4) header["qamari"] = `${qamari[0]} ${qamari[1]} ${qamari[2]}`;
@@ -58,8 +60,14 @@ function getEndOfTheMonthHeader(d, header) {
     header["miladi"] += ` - ${miladiMonth} ${miladiYear}`;
   }
 
-  const qamariYear = d.toLocaleDateString("ar-SA", { year: "numeric" }).split(" ")[0];
-  const qamariMonth = d.toLocaleDateString("ar-SA", { month: "long" });
+  const qamariYear = d
+    .toLocaleDateString("ar-SA", { year: "numeric", timeZone: "UTC", calendar: "islamic" })
+    .split(" ")[0];
+  const qamariMonth = d.toLocaleDateString("ar-SA", {
+    month: "long",
+    timeZone: "UTC",
+    calendar: "islamic",
+  });
 
   if (header["qamari"].includes(qamariYear)) {
     const qamariParts = header["qamari"].split(" ");
@@ -90,6 +98,8 @@ function getNumberOfMonthAndDayForHolidays(d, jalali, hijri, gregorian) {
   hijri["month"] = Number(
     d.toLocaleDateString("ar-SA-u-nu-latn", {
       month: "numeric",
+      timeZone: "UTC",
+      calendar: "islamic",
     })
   );
   hijri.day = Number(hijriDate.split("/")[0]);
@@ -159,7 +169,7 @@ async function getMonth(year, month) {
     day["day"] = {
       j: d.toLocaleDateString("fa-IR", { day: "numeric" }),
       m: d.getDate().toString(),
-      q: d.toLocaleDateString("ar-SA", { day: "numeric" }),
+      q: d.toLocaleDateString("ar-SA", { day: "numeric", timeZone: "UTC", calendar: "islamic" }),
     };
     day["events"] = {
       isHoliday: false,
