@@ -184,11 +184,7 @@ async function getMonth(year, month) {
       doneWithStartIndex = true;
     else if (day.disabled && !doneWithStartIndex) startIndex++;
     if (monthNumber === month) i++;
-    else if (
-      (i === lengthOfMonth && weekdayLong === week[6]) ||
-      (i === lengthOfMonth - 1 && weekdayLong === week[6])
-    )
-      i++;
+    if (i === lengthOfMonth && weekdayLong === week[6]) i++;
 
     d.setDate(d.getDate() + 1);
   }
