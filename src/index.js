@@ -30,10 +30,10 @@ function isLeapYearJalali(year) {
 }
 
 function getStartOfTheMonthHeader(d, header) {
-  header["jalali"] = d.toLocaleDateString("fa-IR-u-nu-latn", {
+  header.jalali = d.toLocaleDateString("fa-IR-u-nu-latn", {
     month: "long",
   });
-  header["miladi"] = d.toLocaleDateString("en-US", {
+  header.gregorian = d.toLocaleDateString("en-US", {
     month: "long",
     year: "numeric",
   });
@@ -45,19 +45,19 @@ function getStartOfTheMonthHeader(d, header) {
       calendar: "islamic",
     })
     .split(" ");
-  if (qamari.length === 4) header["qamari"] = `${qamari[0]} ${qamari[1]} ${qamari[2]}`;
-  else if (qamari.length === 3) header["qamari"] = `${qamari[0]} ${qamari[1]}`;
+  if (qamari.length === 4) header.hijri = `${qamari[0]} ${qamari[1]} ${qamari[2]}`;
+  else if (qamari.length === 3) header.hijri = `${qamari[0]} ${qamari[1]}`;
 }
 
 function getEndOfTheMonthHeader(d, header) {
   const miladiYear = d.toLocaleDateString("en-US", { year: "numeric" });
   const miladiMonth = d.toLocaleDateString("en-US", { month: "long" });
-  if (header["miladi"].includes(miladiYear)) {
-    header["miladi"] = `${header["miladi"].split(" ")[0]} - ${miladiMonth}  ${
-      header["miladi"].split(" ")[1]
+  if (header.gregorian.includes(miladiYear)) {
+    header.gregorian = `${header.gregorian.split(" ")[0]} - ${miladiMonth}  ${
+      header.gregorian.split(" ")[1]
     }`;
   } else {
-    header["miladi"] += ` - ${miladiMonth} ${miladiYear}`;
+    header.gregorian += ` - ${miladiMonth} ${miladiYear}`;
   }
 
   const qamariYear = d
@@ -69,14 +69,14 @@ function getEndOfTheMonthHeader(d, header) {
     calendar: "islamic",
   });
 
-  if (header["qamari"].includes(qamariYear)) {
-    const qamariParts = header["qamari"].split(" ");
-    if (header["qamari"].split(" ").length === 2)
-      header["qamari"] = `${qamariParts[0]} - ${qamariMonth} ${qamariParts[1]}`;
-    else if (header["qamari"].split(" ").length === 3)
-      header["qamari"] = `${qamariParts[0]} ${qamariParts[1]} - ${qamariMonth} ${qamariParts[2]}`;
+  if (header.hijri.includes(qamariYear)) {
+    const qamariParts = header.hijri.split(" ");
+    if (header.hijri.split(" ").length === 2)
+      header.hijri = `${qamariParts[0]} - ${qamariMonth} ${qamariParts[1]}`;
+    else if (header.hijri.split(" ").length === 3)
+      header.hijri = `${qamariParts[0]} ${qamariParts[1]} - ${qamariMonth} ${qamariParts[2]}`;
   } else {
-    header["qamari"] += ` - ${qamariMonth} ${qamariYear}`;
+    header.hijri += ` - ${qamariMonth} ${qamariYear}`;
   }
 }
 
@@ -95,7 +95,7 @@ function getNumberOfMonthAndDayForHolidays(d, jalali, hijri, gregorian) {
 
   const hijriDate = d.toLocaleDateString(arSALocale, options);
   // hijri.month = Number(hijriDate.split("/")[1]);
-  hijri["month"] = Number(
+  hijri.month = Number(
     d.toLocaleDateString("ar-SA-u-nu-latn", {
       month: "numeric",
       timeZone: "UTC",
@@ -165,22 +165,26 @@ async function getMonth(year, month) {
       headerIsCompleted = true;
     }
 
-    day["disabled"] = monthNumber != month;
-    day["day"] = {
-      j: d.toLocaleDateString("fa-IR", { day: "numeric" }),
-      m: d.getDate().toString(),
-      q: d.toLocaleDateString("ar-SA", { day: "numeric", timeZone: "UTC", calendar: "islamic" }),
+    day.disabled = monthNumber != month;
+    day.day = {
+      jalali: d.toLocaleDateString("fa-IR", { day: "numeric" }),
+      gregorian: d.getDate().toString(),
+      hijri: d.toLocaleDateString("ar-SA", {
+        day: "numeric",
+        timeZone: "UTC",
+        calendar: "islamic",
+      }),
     };
-    day["events"] = {
+    day.events = {
       isHoliday: false,
       list: [],
       holidayType: "",
     };
-    if (!day["disabled"]) {
+    if (!day.disabled) {
       setDayEvent(day, events, jalali, hijri, gregorian);
     }
     weeks.push(day);
-    if (!day.disabled && Number(p2e(day.day.j)) === 1 && !doneWithStartIndex)
+    if (!day.disabled && Number(p2e(day.day.jalali)) === 1 && !doneWithStartIndex)
       doneWithStartIndex = true;
     else if (day.disabled && !doneWithStartIndex) startIndex++;
     if (monthNumber === month) i++;
