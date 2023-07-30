@@ -200,24 +200,33 @@ async function getMonth(year, month) {
   };
 }
 
-function splitEventsInDay(holidayCheck, e, calendarType) {
+function areObjectsEqual(obj1, obj2) {
+  return (
+    obj1.isHoliday === obj2.isHoliday &&
+    obj1.event.split(" ").join("") === obj2.event.split(" ").join("") &&
+    obj1.calendarType === obj2.calendarType
+  );
+}
+
+function splitEventsInDay(holidayCheck, e, calendarType, events) {
   let result = [];
   let start = "";
   e.split(" – ").forEach((v) => {
     if (v.split("(").length === v.split(")").length) {
-      result.push({
+      const event = {
         isHoliday: holidayCheck && result.length === 0,
         event: v,
         calendarType: calendarType,
-      });
+      };
+      if (!events.some((a) => areObjectsEqual(a, event))) result.push(event);
     } else {
       if (start) {
-        let event = start + " " + v;
-        result.push({
+        let event = {
           isHoliday: holidayCheck && result.length === 0,
-          event: event,
+          event: start + " " + v,
           calendarType: calendarType,
-        });
+        };
+        if (!events.some((a) => areObjectsEqual(a, event))) result.push(event);
         start = "";
       } else {
         start = v;
@@ -249,7 +258,7 @@ async function getJalaliEvents(holidays) {
           events[month][day].isHoliday = true;
           holidayCheck = true;
         }
-        const e = splitEventsInDay(holidayCheck, event, "jalali");
+        const e = splitEventsInDay(holidayCheck, event, "jalali", events[month][day].list);
         events[month][day].list.push(...e);
       }
     });
@@ -274,7 +283,7 @@ async function getGregorianEvents() {
         const day = Number(d.split("\t")[0].split("/")[1]);
         if (!events.hasOwnProperty(month)) events[month] = {};
         if (!events[month].hasOwnProperty(day)) events[month][day] = { isHoliday: false, list: [] };
-        const e = splitEventsInDay(false, event, "gregorian");
+        const e = splitEventsInDay(false, event, "gregorian", events[month][day].list);
         events[month][day].list.push(...e);
       }
     });
@@ -305,7 +314,7 @@ async function getHijriEvents(holidays) {
           events[month][day].isHoliday = true;
           holidayCheck = true;
         }
-        const e = splitEventsInDay(holidayCheck, event, "hijri");
+        const e = splitEventsInDay(holidayCheck, event, "hijri", events[month][day].list);
         events[month][day].list.push(...e);
       }
     });
