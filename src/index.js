@@ -102,7 +102,14 @@ function getNumberOfMonthAndDayForHolidays(d, jalali, hijri, gregorian) {
       calendar: "islamic",
     })
   );
-  hijri.day = Number(hijriDate.split("/")[0]);
+  // hijri.day = Number(hijriDate.split("/")[0]);
+  hijri.day = Number(
+    d.toLocaleDateString("ar-SA-u-nu-latn", {
+      day: "numeric",
+      timeZone: "UTC",
+      calendar: "islamic",
+    })
+  );
 
   const jalaliDate = d.toLocaleDateString(faIRLocale, options);
   jalali.month = Number(jalaliDate.split("/")[0]);
