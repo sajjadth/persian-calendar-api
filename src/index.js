@@ -30,8 +30,9 @@ function isLeapYearJalali(year) {
 }
 
 function getStartOfTheMonthHeader(d, header) {
-  header.jalali = d.toLocaleDateString("fa-IR-u-nu-latn", {
+  header.jalali = d.toLocaleDateString("fa-IR", {
     month: "long",
+    year:"numeric"
   });
   header.gregorian = d.toLocaleDateString("en-US", {
     month: "long",
